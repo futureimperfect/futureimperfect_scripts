@@ -11,7 +11,7 @@
 * If URI already exists in the plist, it means
   that you can't add duplicate bookmarks to
   different locations, (e.g., Bookmarks
-  Menu and Bookmarks Bar. Fix this.
+  Menu and Bookmarks Bar). Fix this.
 * Make the default to import one bookmark
   at a time, CSV as an option
 * Allow adding folders of bookmarks
@@ -32,6 +32,7 @@ from sys import platform as _platform
 PLIST_BUDDY = '/usr/libexec/PlistBuddy'
 
 def getConsoleUser():
+    """Returns the currently logged in user."""
     if os.geteuid() == 0:
         console_user = subprocess.check_output(['/usr/bin/stat', '-f%Su', '/dev/console'])
 
@@ -64,7 +65,6 @@ def addSafariBookmarks(bookmarksCsv, bookmarksLocation):
 
             for row in rows:
 
-                # for i, line in enumerate(searchlines):
                 for line in searchlines:
 
                     if '%s' % row[1] in line:
@@ -99,8 +99,8 @@ def main():
     p = OptionParser()
     p = OptionParser(description="""Adds bookmarks to Safari from a CSV containing bookmark titles[0] and URIs[1]. The proper format of the CSV is (title, uri). Do not include headers in the CSV file.
 """,
-                     prog='addSafariBookmarks',
-                     version='addSafariBookmarks 0.1',
+                     prog='add_safari_bookmarks',
+                     version='add_safari_bookmarks 0.1',
                      usage= 'python %prog.py [-m] /path/to/bookmarks.csv')
 
     p.add_option('-m', '--menubar',
