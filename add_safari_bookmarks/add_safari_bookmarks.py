@@ -34,13 +34,13 @@ PLIST_BUDDY = '/usr/libexec/PlistBuddy'
 def getConsoleUser():
     """Returns the currently logged in user."""
     if os.geteuid() == 0:
-        console_user = subprocess.check_output(['/usr/bin/stat', '-f%Su', '/dev/console'])
+        console_user = subprocess.check_output(['/usr/bin/stat', '-f%Su', '/dev/console']).strip()
 
     else:
         import getpass
         console_user = getpass.getuser()
 
-    return console_user.strip()
+    return console_user
 
 def backupBookmarks():
     """Backup current users' Safari Bookmarks.plist file"""
