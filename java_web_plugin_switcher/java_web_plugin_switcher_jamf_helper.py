@@ -2,6 +2,9 @@
 
 '''
 Java Web Plug-In Switcher for OS X
+
+Uses the `jamfHelper` utility to display
+notifications to the end user.
 '''
 
 import logging
@@ -49,6 +52,23 @@ def logger(msg):
                         level=logging.DEBUG)
     logging.debug(msg)
 
+def prompt_user(old_java_vendor, new_java_vendor):
+    '''Displays a dialog with jamfHelper about
+    the Java Web Plug-In being switched.'''
+    response = int(os.popen('"{jamf_helper}" -windowType utility -icon "{icon}" -title "{title}" -heading "{heading}" -description "{description}" -button1 "OK" -button2 "Cancel" -cancelButton "2"'.format(
+        description='You are switching from %s\'s Java Plug-In to %s\'s Java Plug-In. Are you sure you want to continue? You\'ll need to restart your Web browser for the changes to take effect.' % (old_java_vendor, new_java_vendor),
+        jamf_helper='/Library/Application Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper',
+        heading='Switch Java Web Plug-In?',
+        icon='/Library/Application Support/JAMF/bin/jamfHelper.app/Contents/Resources/Message.png',
+        title='Java Web Plug-In Switcher'
+    )).read())
+
+    if response == 0:
+        pass
+    else:
+        logger('%s cancelled the operation. Exiting now.' % get_console_user())
+        exit(1)
+
 def main():
     if os.path.exists(JAVA_WEB_PLUGIN):
         try:
@@ -65,6 +85,7 @@ def main():
             disabled_plugin = os.path.join(DISABLED_PLUGINS, 'JavaAppletPlugin.plugin')
 
             if java_vendor == 'oracle':
+                prompt_user(java_vendor.capitalize(), 'Apple')
                 os.rename(JAVA_WEB_PLUGIN, disabled_plugin)
                 os.symlink(SYSTEM_JAVA, JAVA_WEB_PLUGIN)
 
@@ -74,11 +95,12 @@ def main():
                            javaws)
 
             elif java_vendor == 'apple':
+                prompt_user(java_vendor.capitalize(), 'Oracle')
 
                 if os.path.isdir(disabled_plugin):
                     os.unlink(JAVA_WEB_PLUGIN)
                     os.rename(disabled_plugin, JAVA_WEB_PLUGIN)
-                    
+
                     # Enable Java 7 Web Start
                     javaws = '/usr/bin/javaws'
                     os.symlink('/System/Library/Frameworks/JavaVM.framework/Versions/Current/Commands/javaws',
