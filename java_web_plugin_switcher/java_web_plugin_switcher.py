@@ -55,12 +55,8 @@ def main():
             if not os.path.isdir(DISABLED_PLUGINS):
                 os.makedirs(DISABLED_PLUGINS)
 
-            if os.path.islink(JAVA_WEB_PLUGIN):
-                real_path = os.path.realpath(JAVA_WEB_PLUGIN)
-                java_info_plist = os.path.join(real_path, 'Contents/Info.plist')
-            else:
-                java_info_plist = os.path.join(JAVA_WEB_PLUGIN, 'Contents/Info.plist')
-
+            real_path = os.path.realpath(JAVA_WEB_PLUGIN)
+            java_info_plist = os.path.join(real_path, 'Contents/Info.plist')
             java_vendor = determine_java_vendor(java_info_plist)
             disabled_plugin = os.path.join(DISABLED_PLUGINS, 'JavaAppletPlugin.plugin')
 
