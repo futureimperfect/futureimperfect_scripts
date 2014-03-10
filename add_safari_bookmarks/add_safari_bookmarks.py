@@ -93,7 +93,7 @@ def addSafariBookmarks(bookmarksCsv, bookmarksLocation):
                         'Add :Children:%d:Children:0:WebBookmarkType string WebBookmarkTypeLeaf' % bookmarksLocation])
 
         except csv.Error as e:
-            sys.exit('file %s, line %d: %s' % (filename, reader.line_num, e))
+            sys.exit('file %s, line %d: %s' % (bookmarksCsv[0], rows.line_num, e))
 
 def main():
     p = OptionParser()
