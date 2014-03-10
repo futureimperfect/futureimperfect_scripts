@@ -67,27 +67,27 @@ def addSafariBookmarks(bookmarksCsv, bookmarksLocation):
 
                 for line in searchlines:
 
-                    if '%s' % row[1] in line:
+                    if row[1] in line:
                         break # for...else: break out of loop if uri[1] exists in plist
 
                 else:
-                    subprocess.check_output(['%s' % PLIST_BUDDY,
+                    subprocess.check_output([PLIST_BUDDY,
                         '%s' % bookmarksPlist,
                         '-c',
                         'Add :Children:%d:Children:0 dict' % bookmarksLocation])
-                    subprocess.check_output(['%s' % PLIST_BUDDY,
+                    subprocess.check_output([PLIST_BUDDY,
                         '%s' % bookmarksPlist,
                         '-c',
                         'Add :Children:%d:Children:0:URIDictionary dict' % bookmarksLocation])
-                    subprocess.check_output(['%s' % PLIST_BUDDY,
+                    subprocess.check_output([PLIST_BUDDY,
                         '%s' % bookmarksPlist,
                         '-c',
                         'Add :Children:%d:Children:0:URIDictionary:title string %s' % (bookmarksLocation, row[0])])
-                    subprocess.check_output(['%s' % PLIST_BUDDY,
+                    subprocess.check_output([PLIST_BUDDY,
                         '%s' % bookmarksPlist,
                         '-c',
                         'Add :Children:%d:Children:0:URLString string %s' % (bookmarksLocation, row[1])])
-                    subprocess.check_output(['%s' % PLIST_BUDDY,
+                    subprocess.check_output([PLIST_BUDDY,
                         '%s' % bookmarksPlist,
                         '-c',
                         'Add :Children:%d:Children:0:WebBookmarkType string WebBookmarkTypeLeaf' % bookmarksLocation])
