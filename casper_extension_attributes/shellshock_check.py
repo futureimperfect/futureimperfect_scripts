@@ -80,6 +80,7 @@ def main():
 
     if len(bad_shells) > 0:
         print('<result>%s</result>' % ', '.join(bad_shells))
+        os.remove(os.path.join(os.getcwd(), 'echo'))
     else:
         print('<result>Patched</result>')
 
